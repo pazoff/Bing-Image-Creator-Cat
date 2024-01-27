@@ -1,0 +1,9 @@
+{
+    "name": "Bing Image Creator Cat",
+    "description": "Generate images using the Bing Image Creator. How to use it? Just add * to the end of your prompt. Example: A colorful drawing of The Cheshire Cat.*",
+    "author_name": "Pazoff",
+    "tags": "image generation,Bing,image,creator",
+    "plugin_url": "https://github.com/pazoff/Bing-Image-Creator-Cat",
+    "thumb": "https://raw.githubusercontent.com/pazoff/Bing-Image-Creator-Cat/main/bing-logo.jpg",
+    "version": "0.0.1"
+}
