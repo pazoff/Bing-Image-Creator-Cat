@@ -46,10 +46,10 @@ def generate_Bing_images(prompt,cat):
         no_bing_cookie = 'Missing Bing Cookie in plugin settings. How to get the Bing Cookie: https://github.com/Mazawrath/BingImageCreator#getting-authentication'
         return no_bing_cookie
 
-    img_tags = generate_img_tags(bing_Cookie, prompt, download_count)
+    image_tags = generate_img_tags(bing_Cookie, prompt, download_count)
 
-    if img_tags is not None:
-        return img_tags
+    if image_tags is not None:
+        return image_tags
 
 # Hook function for fast reply generation
 @hook(priority=5)
