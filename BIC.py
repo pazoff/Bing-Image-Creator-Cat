@@ -1,3 +1,4 @@
+# You can get updates to this code from https://github.com/Mazawrath/BingImageCreator/tree/main/src
 import argparse
 import asyncio
 import contextlib
