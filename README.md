@@ -11,3 +11,5 @@ A colorful drawing of The Cheshire Cat.*
 
 <img width="50%" src="https://raw.githubusercontent.com/pazoff/Bing-Image-Creator-Cat/main/cheshire-cat.jpg">
 
+Check out also the [Stable Diffusion Cat](https://github.com/pazoff/Stable-Diffusion-Cat).
+
