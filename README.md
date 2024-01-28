@@ -15,7 +15,9 @@ A colorful drawing of The Cheshire Cat.*
 
 * New version 0.0.2:
   
-  Added prompt suggestion by the LLM that can be enabled/disabled in the plugin settings.
+  - Added: Prompt suggestion by the LLM that can be enabled/disabled in the plugin settings.
+  
+  - Added: Background image generation that can be enabled/disabled in the plugin settings.
 
 Check out also the [Stable Diffusion Cat](https://github.com/pazoff/Stable-Diffusion-Cat).
 
