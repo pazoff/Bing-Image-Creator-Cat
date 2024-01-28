@@ -58,7 +58,7 @@ def generate_img_tags(auth_cookie, prompt, download_count, auth_cookie_SRCHHPGUS
             with open(img_output_HTML_file, "a", encoding="utf-8") as img_file:
                 img_file.write(img_tags)
         except Exception as err:
-            print(f"Error saving the images to {destination_path}: {err}")
+            print(f"Error saving the images tags to {destination_path}: {err}")
 
         # Return the generated <img> tags
         return img_tags
