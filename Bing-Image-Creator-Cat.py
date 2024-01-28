@@ -55,7 +55,7 @@ def generate_Bing_images(prompt,cat):
 
 def related_image_prompt(prompt, cat):
     try:
-        related_prompt = cat.llm(f"Write 3 prompts for Bing image creator, very diffrent from each other, based on: {prompt}. Every prompt must end with *")
+        related_prompt = cat.llm(f"Write 3 prompts for Bing image creator, very diffrent from each other, based on: {prompt}. Every prompt must end with *<br><br>")
         if related_prompt:
             cat.send_ws_message(content=f"<b>You may also try:</b><br>{related_prompt}", msg_type='chat')
     except Exception as e:
