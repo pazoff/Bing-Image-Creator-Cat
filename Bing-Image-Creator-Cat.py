@@ -5,6 +5,7 @@ from typing import Dict
 import threading
 import os
 from datetime import datetime
+import time
 import uuid
 
 # Define settings schema using Pydantic for the Cat plugin
@@ -12,6 +13,7 @@ class BingImageCreatorCatSettings(BaseModel):
     # Bing Cookie
     bing_Cookie: str
     prompt_suggestion: bool = True
+    image_generation_in_the_background: bool = False
 
 
 # Plugin function to provide the Cat with the settings schema
@@ -67,22 +69,64 @@ def generate_img_tags(auth_cookie, prompt, download_count, auth_cookie_SRCHHPGUS
         b_error = (f"An error occurred: {str(e)}.<br>If the error persists you can check if your Bing Cookie is still valid: https://github.com/Mazawrath/BingImageCreator#getting-authentication")
         return b_error
 
-def generate_Bing_images(prompt,cat):
 
-    # Load the plugin settings
-    settings = cat.mad_hatter.get_plugin().load_settings()
-    bing_Cookie = settings.get("bing_Cookie")
-    download_count = 4  # Number of images to include in <img> tags
+def generate_Bing_images(prompt, cat):
+    try:
+        # Load the plugin settings
+        settings = cat.mad_hatter.get_plugin().load_settings()
+        bing_Cookie = settings.get("bing_Cookie")
+        prompt_suggestion = settings.get("prompt_suggestion")
+        image_generation_in_the_background = settings.get("image_generation_in_the_background")
+        download_count = 4  # Number of images to include in <img> tags
 
-    # Check for a Bing Cookie
-    if (bing_Cookie is None) or (bing_Cookie == ""):
-        no_bing_cookie = 'Missing Bing Cookie in the plugin settings. How to get the Bing Cookie: https://github.com/Mazawrath/BingImageCreator#getting-authentication'
-        return no_bing_cookie
+        if prompt_suggestion == None:
+            prompt_suggestion = True
 
-    image_tags = generate_img_tags(bing_Cookie, prompt, download_count)
+        if image_generation_in_the_background is None:
+            image_generation_in_the_background = False
 
-    if image_tags is not None:
-        return image_tags
+        # Check for a Bing Cookie
+        if (bing_Cookie is None) or (bing_Cookie == ""):
+            no_bing_cookie = 'Missing Bing Cookie in the plugin settings. How to get the Bing Cookie: https://github.com/Mazawrath/BingImageCreator#getting-authentication'
+            return no_bing_cookie
+
+        # Record the start time
+        start_time = time.time()
+
+        image_tags = generate_img_tags(bing_Cookie, prompt, download_count)
+
+        # Record the end time
+        end_time = time.time()
+
+        # Calculate the execution time in seconds
+        execution_time_seconds = end_time - start_time
+
+        # Convert the execution time to minutes
+        execution_time_minutes = execution_time_seconds / 60
+
+        if image_generation_in_the_background:
+            in_background = "[Threading]"
+        else:
+            in_background = ""
+
+        print(f"{in_background}Bing images generation done in {execution_time_minutes:.2f} minutes - {execution_time_seconds:.2f} seconds.")
+
+        if image_tags is not None:
+            generation_message = f"<br>Generation took {execution_time_minutes:.2f} minutes - {execution_time_seconds:.2f} seconds."
+            if image_generation_in_the_background:
+                cat.send_ws_message(content=f"Bing images generated on: <b>{prompt}</b>{generation_message}", msg_type='chat')
+                cat.send_ws_message(content=image_tags, msg_type='chat')
+                if prompt_suggestion:
+                    related_image_prompt(prompt, cat)
+            return image_tags + generation_message
+
+    except Exception as e:
+        # Handle the exception
+        error_message = f"An error occurred: {str(e)}"
+        print(error_message)
+        return error_message
+
+
 
 def related_image_prompt(prompt, cat):
     try:
@@ -106,8 +150,13 @@ def agent_fast_reply(fast_reply, cat) -> Dict:
         # Load settings
         settings = cat.mad_hatter.get_plugin().load_settings()
         prompt_suggestion = settings.get("prompt_suggestion")
+        image_generation_in_the_background = settings.get("image_generation_in_the_background")
+        
         if prompt_suggestion == None:
             prompt_suggestion = True
+
+        if image_generation_in_the_background == None:
+            image_generation_in_the_background = False
 
         # Remove the asterisk
         message = message[:-1]
@@ -115,7 +164,12 @@ def agent_fast_reply(fast_reply, cat) -> Dict:
         print("Generating Bing images based on the prompt " + message)
         cat.send_ws_message(content='Generating Bing images based on the prompt ' + message + ' ...', msg_type='chat_token')
 
-        # Generate image with the provided prompt and 50 steps
+        if image_generation_in_the_background:
+            t1 = threading.Thread(target=generate_Bing_images, args=(message, cat))
+            t1.start()
+            return {"output": "Generating Bing images in the background. The images will be sent to you when they are ready."}
+
+        
         generated_images = generate_Bing_images(message,cat)
 
         if generated_images:
