@@ -13,5 +13,9 @@ A colorful drawing of The Cheshire Cat.*
 <img width="50%" src="https://raw.githubusercontent.com/pazoff/Bing-Image-Creator-Cat/main/img/2.jpg"><img width="50%" src="https://raw.githubusercontent.com/pazoff/Bing-Image-Creator-Cat/main/img/3.jpg">
 <img width="50%" src="https://raw.githubusercontent.com/pazoff/Bing-Image-Creator-Cat/main/img/4.jpg"><img width="50%" src="https://raw.githubusercontent.com/pazoff/Bing-Image-Creator-Cat/main/img/5.jpg">
 
+* New version 0.0.2:
+  
+  Added prompt suggestion by the LLM that can be enabled/disabled in the plugin settings.
+
 Check out also the [Stable Diffusion Cat](https://github.com/pazoff/Stable-Diffusion-Cat).
 
