@@ -44,13 +44,21 @@ def generate_img_tags(auth_cookie, prompt, download_count, auth_cookie_SRCHHPGUS
                     os.makedirs(full_path)
                 destination_path = os.path.join(full_path, "bicc_" + datetime.now().strftime("%Y-%m-%d"))
                 image_generator.save_images(image_links, destination_path, file_name = destination_filename)
-            except:
-                pass
+                print(f"{download_count} images saved to {destination_path}")
+                
+            except Exception as err:
+                    print(f"Error saving the images to {destination_path}: {err}")
 
         # Generate <img> tags
         img_tags = ""
         for link in image_links[:download_count]:
             img_tags += f'<img src="{link}">\n'
+        try:
+            img_output_HTML_file = f"{destination_path}/images_tags.html"
+            with open(img_output_HTML_file, "a", encoding="utf-8") as img_file:
+                img_file.write(img_tags)
+        except Exception as err:
+            print(f"Error saving the images to {destination_path}: {err}")
 
         # Return the generated <img> tags
         return img_tags
