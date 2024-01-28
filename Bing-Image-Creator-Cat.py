@@ -3,6 +3,9 @@ from cat.mad_hatter.decorators import tool, hook, plugin
 from pydantic import BaseModel
 from typing import Dict
 import threading
+import os
+from datetime import datetime
+import uuid
 
 # Define settings schema using Pydantic for the Cat plugin
 class BingImageCreatorCatSettings(BaseModel):
@@ -23,6 +26,26 @@ def generate_img_tags(auth_cookie, prompt, download_count, auth_cookie_SRCHHPGUS
 
         # Fetch image links
         image_links = image_generator.get_images(prompt)
+        
+        # Save the images
+        if image_links:
+            try:
+                # Remove invalid characters and replace spaces
+                cleaned_prompt = ''.join(c if c.isalnum() or c in ['-', '_'] else '_' for c in prompt)
+
+                # Limit the length of the filename
+                max_filename_length = 200
+                cleaned_prompt = cleaned_prompt[:max_filename_length]
+                
+                random_str = str(uuid.uuid4())
+                destination_filename = cleaned_prompt + random_str[:4]
+                full_path = "/app/cat/data/BICC/"
+                if not os.path.exists(full_path):
+                    os.makedirs(full_path)
+                destination_path = os.path.join(full_path, "bicc_" + datetime.now().strftime("%Y-%m-%d"))
+                image_generator.save_images(image_links, destination_path, file_name = destination_filename)
+            except:
+                pass
 
         # Generate <img> tags
         img_tags = ""
