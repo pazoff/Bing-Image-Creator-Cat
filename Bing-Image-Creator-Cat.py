@@ -143,6 +143,14 @@ def related_image_prompt(prompt, cat):
     except Exception as e:
         print(f"Error in related_image_prompt: {e}")
 
+def prompt_elaboration(prompt, cat):
+    try:
+        pr_elaboration = cat.llm(prompt)
+        if pr_elaboration:
+            cat.send_ws_message(content=pr_elaboration, msg_type='chat')
+    except Exception as e:
+        print(f"Error in prompt_elaboration: {e}")
+
 
 # Hook function for fast reply generation
 @hook(priority=5)
@@ -217,9 +225,10 @@ if enable_image_generation_tool:
 
         cat.send_ws_message(content='Generating Bing images based on the prompt ' + tool_input + ' ...', msg_type='chat_token')
         generated_images = generate_Bing_images(tool_input,cat)
+        
         if generated_images:
             if prompt_suggestion:
-                t3 = threading.Thread(target=related_image_prompt, args=(tool_input, cat))
+                t3 = threading.Thread(target=prompt_elaboration, args=(tool_input, cat))
                 t3.start()
 
         return generated_images
