@@ -120,14 +120,14 @@ def generate_Bing_images(prompt, cat):
 
         if image_tags is not None:
             generation_message = f"<br>Generation took {execution_time_minutes:.2f} minutes - {execution_time_seconds:.2f} seconds."
-            if enable_image_generation_tool == True:
-                image_generation_in_the_background = False
+            
             if image_generation_in_the_background:
                 cat.send_ws_message(content=f"Bing images generated on: <b>{prompt}</b>{generation_message}", msg_type='chat')
                 cat.send_ws_message(content=image_tags, msg_type='chat')
                 if prompt_suggestion:
                     related_image_prompt(prompt, cat)
                 return
+
             return image_tags + generation_message
 
     except Exception as e:
@@ -159,6 +159,19 @@ def prompt_elaboration(prompt, cat):
 @hook(priority=5)
 def agent_fast_reply(fast_reply, cat) -> Dict:
     return_direct = False
+
+    # Load the plugin settings
+    settings = cat.mad_hatter.get_plugin().load_settings()
+    image_generation_in_the_background = settings.get("image_generation_in_the_background")
+    enable_image_generation_tool = settings.get("enable_image_generation_tool")
+    
+    if enable_image_generation_tool is None:
+        enable_image_generation_tool = False
+    if enable_image_generation_tool == True:
+        image_generation_in_the_background = False
+        settings["image_generation_in_the_background"] = image_generation_in_the_background
+        settings = cat.mad_hatter.get_plugin().save_settings(settings)
+
 
     # Get user message from the working memory
     message = cat.working_memory["user_message_json"]["text"]
@@ -222,6 +235,15 @@ if enable_image_generation_tool:
         # Load settings
         settings = cat.mad_hatter.get_plugin().load_settings()
         prompt_suggestion = settings.get("prompt_suggestion")
+        image_generation_in_the_background = settings.get("image_generation_in_the_background")
+        enable_image_generation_tool = settings.get("enable_image_generation_tool")
+        
+        if enable_image_generation_tool is None:
+            enable_image_generation_tool = False
+        if enable_image_generation_tool == True:
+            image_generation_in_the_background = False
+            settings["image_generation_in_the_background"] = image_generation_in_the_background
+            settings = cat.mad_hatter.get_plugin().save_settings(settings)
 
         if prompt_suggestion == None:
             prompt_suggestion = True
