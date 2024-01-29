@@ -120,11 +120,14 @@ def generate_Bing_images(prompt, cat):
 
         if image_tags is not None:
             generation_message = f"<br>Generation took {execution_time_minutes:.2f} minutes - {execution_time_seconds:.2f} seconds."
-            if image_generation_in_the_background and enable_image_generation_tool == False:
+            if enable_image_generation_tool == True:
+                image_generation_in_the_background = False
+            if image_generation_in_the_background:
                 cat.send_ws_message(content=f"Bing images generated on: <b>{prompt}</b>{generation_message}", msg_type='chat')
                 cat.send_ws_message(content=image_tags, msg_type='chat')
                 if prompt_suggestion:
                     related_image_prompt(prompt, cat)
+                return
             return image_tags + generation_message
 
     except Exception as e:
