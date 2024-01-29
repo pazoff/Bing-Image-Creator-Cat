@@ -20,8 +20,8 @@ A colorful drawing of The Cheshire Cat.*
   - Added: Background image generation that can be enabled/disabled in the plugin settings.
 
 * New version 0.0.3:
-  -  Added: <b>@tool generate_images</b>
-  -  The <b>@tool generate_images</b> can be <b>enabled/disabled</b> in the plugin settings.
+  -  Added: <b>@tool generate_images</b> to be used by the LLM
+  -  The <b>@tool generate_images</b> can be <b>enabled/disabled</b> in the plugin settings(if the LLM not support it).
   -  The plugin must be <b>disabled/enabled</b> the <b>changes to take an effect</b>
 
 Check out also the [Stable Diffusion Cat](https://github.com/pazoff/Stable-Diffusion-Cat).
