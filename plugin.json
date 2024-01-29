@@ -1,6 +1,6 @@
 {
     "name": "Bing Image Creator Cat",
-    "description": "Generate images for free using the Bing Image Creator. How to use it? Just add * to the end of your prompt. Example: A colorful drawing of The Cheshire Cat.*",
+    "description": "Generate images for free using the Bing Image Creator. How to use it? Just add * to the end of your prompt. Example: A colorful drawing of The Cheshire Cat.* Features: Prompt suggestions by the LLM - based on your input, Background image generation - you can continue working with the Cat without waiting the end of the images generation, @tool Image Generation Tool to be used by the LLM - these can be enabled/disabled in the plugin settings. When you Disable/Enable the @tool the plugin itself must be disabled/enabled the changes to take an effect. If you enable the @tool - Background image generation is disabled.",
     "author_name": "Pazoff",
     "tags": "image generation,Bing,image,creator",
     "plugin_url": "https://github.com/pazoff/Bing-Image-Creator-Cat",
