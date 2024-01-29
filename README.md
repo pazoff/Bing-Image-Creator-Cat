@@ -2,6 +2,8 @@
 
 Turn ★ into ⭐ (top-right corner) if you like the project!
 
+<img width="50%" src="https://raw.githubusercontent.com/pazoff/Bing-Image-Creator-Cat/main/bing-logo.jpg">
+
 Generate images for free using your [Cheshire cat](https://github.com/cheshire-cat-ai/core) and [Bing Image Creator](https://www.bing.com/images/create).
 
 ## How to use it?
