@@ -218,9 +218,12 @@ def agent_fast_reply(fast_reply, cat) -> Dict:
     return fast_reply
 
 # Load settings
-this_plugin = myplugin("/app/cat/plugins/Bing-Image-Creator-Cat")
+plugin_folder = os.path.dirname(os.path.realpath(__file__))
+#print(plugin_folder)
+this_plugin = myplugin(plugin_folder)
 settings = this_plugin.load_settings()
 enable_image_generation_tool = settings.get("enable_image_generation_tool")
+#print(enable_image_generation_tool)
 if enable_image_generation_tool == None:
     enable_image_generation_tool = False
 
