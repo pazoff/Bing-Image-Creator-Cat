@@ -1,5 +1,6 @@
 from .BIC import ImageGen
 from cat.mad_hatter.decorators import tool, hook, plugin
+from cat.mad_hatter.plugin import Plugin as myplugin
 from pydantic import BaseModel
 from typing import Dict
 import threading
@@ -14,6 +15,8 @@ class BingImageCreatorCatSettings(BaseModel):
     bing_Cookie: str
     prompt_suggestion: bool = True
     image_generation_in_the_background: bool = False
+    enable_image_generation_tool: bool = False # Disable/Enable plugin required after changing the option
+
 
 
 # Plugin function to provide the Cat with the settings schema
@@ -185,3 +188,34 @@ def agent_fast_reply(fast_reply, cat) -> Dict:
 
     # Return fast reply if no image generation is requested
     return fast_reply
+
+# Load settings
+this_plugin = myplugin("/app/cat/plugins/Bing-Image-Creator-Cat")
+settings = this_plugin.load_settings()
+enable_image_generation_tool = settings.get("enable_image_generation_tool")
+if enable_image_generation_tool == None:
+    enable_image_generation_tool = False
+
+
+if enable_image_generation_tool:
+
+    @tool(return_direct=True)
+    def generate_images(tool_input, cat): # 
+        """Useful to generate images. This tool generate images based on the user prompt.
+         Input is a string.""" # 
+
+        # Load settings
+        settings = cat.mad_hatter.get_plugin().load_settings()
+        prompt_suggestion = settings.get("prompt_suggestion")
+
+        if prompt_suggestion == None:
+            prompt_suggestion = True
+
+        cat.send_ws_message(content='Generating Bing images based on the prompt ' + tool_input + ' ...', msg_type='chat_token')
+        generated_images = generate_Bing_images(tool_input,cat)
+        if generated_images:
+            if prompt_suggestion:
+                t3 = threading.Thread(target=related_image_prompt, args=(tool_input, cat))
+                t3.start()
+
+        return generated_images
