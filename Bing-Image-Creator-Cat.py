@@ -80,13 +80,17 @@ def generate_Bing_images(prompt, cat):
         bing_Cookie = settings.get("bing_Cookie")
         prompt_suggestion = settings.get("prompt_suggestion")
         image_generation_in_the_background = settings.get("image_generation_in_the_background")
+        enable_image_generation_tool = settings.get("enable_image_generation_tool")
         download_count = 4  # Number of images to include in <img> tags
-
+        
         if prompt_suggestion == None:
             prompt_suggestion = True
 
         if image_generation_in_the_background is None:
             image_generation_in_the_background = False
+
+        if enable_image_generation_tool is None:
+            enable_image_generation_tool = False
 
         # Check for a Bing Cookie
         if (bing_Cookie is None) or (bing_Cookie == ""):
@@ -116,7 +120,7 @@ def generate_Bing_images(prompt, cat):
 
         if image_tags is not None:
             generation_message = f"<br>Generation took {execution_time_minutes:.2f} minutes - {execution_time_seconds:.2f} seconds."
-            if image_generation_in_the_background:
+            if image_generation_in_the_background and enable_image_generation_tool == False:
                 cat.send_ws_message(content=f"Bing images generated on: <b>{prompt}</b>{generation_message}", msg_type='chat')
                 cat.send_ws_message(content=image_tags, msg_type='chat')
                 if prompt_suggestion:
