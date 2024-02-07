@@ -26,5 +26,8 @@ A colorful drawing of The Cheshire Cat.*
   -  The <b>@tool generate_images</b> can be <b>enabled/disabled</b> in the plugin settings(if the LLM not support it).
   -  The plugin must be <b>disabled/enabled</b> the <b>changes to take an effect</b>
 
+* New version 0.0.4:
+  - fix error 'Region not supported'
+
 Check out also the [Stable Diffusion Cat](https://github.com/pazoff/Stable-Diffusion-Cat).
 
