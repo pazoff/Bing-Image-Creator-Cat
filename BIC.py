@@ -20,7 +20,7 @@ import requests
 BING_URL = os.getenv("BING_URL", "https://www.bing.com")
 # Generate random IP between range 13.104.0.0/14
 FORWARDED_IP = (
-    f"3.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+    f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 )
 HEADERS = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
@@ -36,6 +36,7 @@ HEADERS = {
 # Error messages
 error_timeout = "Your request has timed out."
 error_redirect = "Redirect failed"
+error_descriptive = "Prompt not descriptive enough"
 error_blocked_prompt = (
     "Your prompt has been blocked by Bing. Try to change any bad words and try again."
 )
@@ -129,6 +130,9 @@ class ImageGen:
             if self.debug_file:
                 self.debug(f"ERROR: {error_unsupported_lang}")
             raise Exception(error_unsupported_lang)
+        if "please provide a more descriptive prompt" in response.text.lower():
+            print(f"ERROR: {response.text}")
+            raise Exception(error_descriptive)
         if response.status_code != 302:
             # if rt4 fails, try rt3
             url = f"{BING_URL}/images/create?q={url_encoded_prompt}&rt=3&FORM=GENCRE"
